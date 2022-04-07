@@ -75,6 +75,5 @@ function App() {
 
 export default withLicensesProvider({
     hostURL: 'https://digital.dev.greatminds.dev',
-    districtId: '7300e0f6-a132-42d7-abbb-4c1371a1eec9',
-    user: {}
+    districtId: '7300e0f6-a132-42d7-abbb-4c1371a1eec9'
 })(App);
