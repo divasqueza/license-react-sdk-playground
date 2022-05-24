@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@greatminds/dp-license-react-sdk": "^1.7.1-beta.3",
+    "@greatminds/dp-license-react-sdk": "^1.8.0",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",

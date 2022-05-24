@@ -9,9 +9,11 @@ import {
     withLicenseClient,
 } from "@greatminds/dp-license-react-sdk";
 
+import { Version } from '@greatminds/dp-license-sdk';
+
 function DisplayConfig({config}) {
     return (
-        <b>{config.hostURL}</b>
+        <b>{config?.hostURL}</b>
     );
 }
 
@@ -73,7 +75,13 @@ function App() {
   );
 }
 
+window.onunhandledrejection = function(e) {
+    console.log('Error detected!');
+    console.log(e.reason);
+}
+
 export default withLicensesProvider({
     hostURL: 'https://digital.dev.greatminds.dev',
-    districtId: '7300e0f6-a132-42d7-abbb-4c1371a1eec9'
+    districtId: '7300e0f6-a132-42d7-abbb-4c1371a1eec9',
+    version: Version.V3,
 })(App);
