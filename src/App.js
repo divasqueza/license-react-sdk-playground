@@ -7,9 +7,23 @@ import {
     withActiveCurriculums,
     withActiveProducts,
     withLicenseClient,
+    UnauthorizedError,
+    NotFoundError,
+    ServerError,
+    Version
 } from "@greatminds/dp-license-react-sdk";
+import {ErrorBoundary} from 'react-error-boundary'
 
-import { Version } from '@greatminds/dp-license-sdk';
+function ErrorFallback({error}) {
+    return (
+        <div role="alert">
+            <p>Something went wrong:</p>
+            <pre>{error.code}</pre>
+            <pre>{error.message}</pre>
+            <pre>{error.details}</pre>
+        </div>
+    )
+}
 
 function DisplayConfig({config}) {
     return (
@@ -57,27 +71,36 @@ const WrappedDisplayCurriculums = withActiveCurriculums(DisplayCurriculums)
 const WrappedDisplayProducts = withActiveProducts(DisplayProducts)
 const WithLicenseClient = withLicenseClient(ClientUsage);
 
-function App() {
-    return (
-    <div className="App">
-      <header className="App-header">
-        <LicenseDisplayConfig/>
-        <b>----------------------------------------------------------</b>
-        <WrappedDisplayLicenses/>
-        <b>----------------------------------------------------------</b>
-        <WrappedDisplayCurriculums/>
-        <b>----------------------------------------------------------</b>
-        <WrappedDisplayProducts/>
-        <b>----------------------------------------------------------</b>
-        <WithLicenseClient/>
-      </header>
-    </div>
-  );
+const myErrorHandler = (error) => {
+    if(error instanceof UnauthorizedError) {
+        console.info('Authorization info invalid or expired');
+    } else if(error instanceof NotFoundError) {
+        console.info('License not found');
+    } else if(error instanceof ServerError) {
+        console.info('License not found');
+    } else {
+        console.info('Unexpected error');
+    }
 }
 
-window.onunhandledrejection = function(e) {
-    console.log('Error detected!');
-    console.log(e.reason);
+function App() {
+    return (
+        <ErrorBoundary FallbackComponent={ErrorFallback} onError={myErrorHandler}>
+            <div className="App">
+                <header className="App-header">
+                    <LicenseDisplayConfig/>
+                    <b>----------------------------------------------------------</b>
+                    <WrappedDisplayLicenses/>
+                    <b>----------------------------------------------------------</b>
+                    <WrappedDisplayCurriculums/>
+                    <b>----------------------------------------------------------</b>
+                    <WrappedDisplayProducts/>
+                    <b>----------------------------------------------------------</b>
+                    <WithLicenseClient/>
+                </header>
+            </div>
+        </ErrorBoundary>
+    );
 }
 
 export default withLicensesProvider({
